@@ -1,8 +1,10 @@
-FROM multiarch/alpine:x86_64-edge
+FROM debian
 
-RUN cat /etc/apk/repositories| sed 's@main@testing@g' > /testing && cat testing >> /etc/apk/repositories
+RUN apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+ENV LANG en_US.utf8
 
-RUN apk add amule --update
+RUN apt-get install amule-daemon
 
 # volumes and ports
 VOLUME /config /downloads
